@@ -3,20 +3,33 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
-
+import json
 from models import setup_db, Question, Category
+import os
 
 QUESTIONS_PER_PAGE = 10
 
 
+def load_config():
+    file_dir = os.path.dirname(os.path.realpath(__file__))
+    file_path = os.path.join(file_dir, "config.json")
+    with open(file_path) as f:
+        config = json.load(f)
+    return config
+
+
 def create_app(test_config=None):
     # create and configure the app
+    config = load_config()
+
     app = Flask(__name__)
     setup_db(app)
     """
     @DONE: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
     """
-    cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+    cors = CORS(
+        app, resources={r"{}/*".format(config["api_url"]["base"]): {"origins": "*"}}
+    )
 
     """
     @DONE: Use the after_request decorator to set Access-Control-Allow
@@ -32,30 +45,36 @@ def create_app(test_config=None):
         )
         return response
 
-    @app.route("/api/v1")
+    @app.route(config["api_url"]["base"])
     def index():
         return jsonify({"success": True, "message": "Welcome to Trivia-API"})
 
     """
-    @TODO: 
-    Create an endpoint to handle GET requests 
-    for all available categories.
+    DONE: Create an endpoint to handle GET requests for all available categories.
     """
-    @app.route("/api/v1/categories")
+
+    @app.route(config["api_url"]["base"] + config["api_url"]["categories"])
     def find_categories():
-        return jsonify(
-            {
-                "success": True,
-                "categories": {
-                    "1": "Science",
-                    "2": "Art",
-                    "3": "Geography",
-                    "4": "History",
-                    "5": "Entertainment",
-                    "6": "Sports",
-                },
-            }
-        )
+        try:
+            page = request.args.get("page", 1, type=int)
+            item_per_page = 10
+
+            list_of_categories = Category.query.all()
+
+            start_index = (page - 1) * item_per_page
+            end_index = page * item_per_page
+
+            if start_index > len(list_of_categories):
+                abort(404)
+
+            returned_categories = {}
+            for category in list_of_categories[start_index:end_index]:
+                returned_categories[category.id] = category.type
+
+        except:
+            abort(500)
+
+        return jsonify({"success": True, "categories": returned_categories}), 200
 
     """
     @TODO: 
@@ -69,7 +88,8 @@ def create_app(test_config=None):
     ten questions per page and pagination at the bottom of the screen for three pages.
     Clicking on the page numbers should update the questions. 
     """
-    @app.route("/api/v1/questions")
+
+    @app.route(config["api_url"]["base"] + config["api_url"]["questions"])
     def find_questions():
         return jsonify(
             {
@@ -159,5 +179,21 @@ def create_app(test_config=None):
     Create error handlers for all expected errors 
     including 404 and 422. 
     """
+
+    @app.errorhandler(404)
+    def resource_not_found(error):
+        return (
+            jsonify({"success": False, "error": 404, "message": "resource not found"}),
+            404,
+        )
+
+    @app.errorhandler(500)
+    def internal_server_error(error):
+        return (
+            jsonify(
+                {"success": False, "error": 500, "message": "internal server error"}
+            ),
+            404,
+        )
 
     return app

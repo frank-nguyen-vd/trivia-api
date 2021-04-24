@@ -5,12 +5,11 @@ from flask_migrate import Migrate
 import json
 
 database_name = "trivia"
-# *** IMPORTANT ****
-# We need both username and password to connect to the database
-# To change password, type below command in bash terminal
-# sudo -u postgres psql
-# \password postgres
-# \q
+# ! We need both username and password to connect to the database
+# ! To change password, type below command in bash terminal
+# ! sudo -u postgres psql
+# ! \password postgres
+# ! \q
 database_path = "postgres://{}:{}@{}/{}".format(
     "postgres", "postgres", "localhost:5432", database_name
 )
@@ -87,6 +86,17 @@ class Category(db.Model):
 
     def __init__(self, type):
         self.type = type
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
     def format(self):
         return {"id": self.id, "type": self.type}
