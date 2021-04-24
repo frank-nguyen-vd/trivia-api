@@ -3,20 +3,33 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
-
+import json
 from models import setup_db, Question, Category
+import os
 
 QUESTIONS_PER_PAGE = 10
 
 
+def load_config():
+    file_dir = os.path.dirname(os.path.realpath(__file__))
+    file_path = os.path.join(file_dir, "config.json")
+    with open(file_path) as f:
+        config = json.load(f)
+    return config
+
+
 def create_app(test_config=None):
     # create and configure the app
+    config = load_config()
+
     app = Flask(__name__)
     setup_db(app)
     """
     @DONE: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
     """
-    cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+    cors = CORS(
+        app, resources={r"{}/*".format(config["api_url"]["base"]): {"origins": "*"}}
+    )
 
     """
     @DONE: Use the after_request decorator to set Access-Control-Allow
@@ -32,7 +45,7 @@ def create_app(test_config=None):
         )
         return response
 
-    @app.route("/api/v1")
+    @app.route(config["api_url"]["base"])
     def index():
         return jsonify({"success": True, "message": "Welcome to Trivia-API"})
 
@@ -40,7 +53,7 @@ def create_app(test_config=None):
     DONE: Create an endpoint to handle GET requests for all available categories.
     """
 
-    @app.route("/api/v1/categories")
+    @app.route(config["api_url"]["base"] + config["api_url"]["categories"])
     def find_categories():
         list_of_categories = Category.query.all()
 
@@ -63,7 +76,7 @@ def create_app(test_config=None):
     Clicking on the page numbers should update the questions. 
     """
 
-    @app.route("/api/v1/questions")
+    @app.route(config["api_url"]["base"] + config["api_url"]["questions"])
     def find_questions():
         return jsonify(
             {

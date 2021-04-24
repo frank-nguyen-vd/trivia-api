@@ -1,0 +1,8 @@
+{
+    "api_url": {
+        "base": "/api/v1",
+        "categories": "/categories",
+        "questions": "/questions",
+        "quizzes": "/quizzes"
+    }
+}

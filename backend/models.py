@@ -5,12 +5,11 @@ from flask_migrate import Migrate
 import json
 
 database_name = "trivia"
-# *** IMPORTANT ****
-# We need both username and password to connect to the database
-# To change password, type below command in bash terminal
-# sudo -u postgres psql
-# \password postgres
-# \q
+# ! We need both username and password to connect to the database
+# ! To change password, type below command in bash terminal
+# ! sudo -u postgres psql
+# ! \password postgres
+# ! \q
 database_path = "postgres://{}:{}@{}/{}".format(
     "postgres", "postgres", "localhost:5432", database_name
 )
