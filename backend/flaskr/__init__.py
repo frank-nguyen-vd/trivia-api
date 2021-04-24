@@ -37,25 +37,18 @@ def create_app(test_config=None):
         return jsonify({"success": True, "message": "Welcome to Trivia-API"})
 
     """
-    @TODO: 
-    Create an endpoint to handle GET requests 
-    for all available categories.
+    DONE: Create an endpoint to handle GET requests for all available categories.
     """
+
     @app.route("/api/v1/categories")
     def find_categories():
-        return jsonify(
-            {
-                "success": True,
-                "categories": {
-                    "1": "Science",
-                    "2": "Art",
-                    "3": "Geography",
-                    "4": "History",
-                    "5": "Entertainment",
-                    "6": "Sports",
-                },
-            }
-        )
+        list_of_categories = Category.query.all()
+
+        returned_categories = {}
+        for category in list_of_categories:
+            returned_categories[category.id] = category.type
+
+        return jsonify({"success": True, "categories": returned_categories})
 
     """
     @TODO: 
@@ -69,6 +62,7 @@ def create_app(test_config=None):
     ten questions per page and pagination at the bottom of the screen for three pages.
     Clicking on the page numbers should update the questions. 
     """
+
     @app.route("/api/v1/questions")
     def find_questions():
         return jsonify(
