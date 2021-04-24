@@ -53,13 +53,21 @@ def create_app(test_config=None):
     DONE: Create an endpoint to handle GET requests for all available categories.
     """
 
+    def conv_categories_list_to_dict(categories):
+        returned_categories = {}
+        for category in categories:
+            returned_categories[category.id] = category.type
+        return returned_categories
+
     @app.route(config["api_url"]["base"] + config["api_url"]["categories"])
     def find_categories():
-        try:
             page = request.args.get("page", 1, type=int)
             item_per_page = 10
 
+        try:
             list_of_categories = Category.query.all()
+        except:
+            abort(500)
 
             start_index = (page - 1) * item_per_page
             end_index = page * item_per_page
@@ -67,12 +75,9 @@ def create_app(test_config=None):
             if start_index > len(list_of_categories):
                 abort(404)
 
-            returned_categories = {}
-            for category in list_of_categories[start_index:end_index]:
-                returned_categories[category.id] = category.type
-
-        except:
-            abort(500)
+        returned_categories = conv_categories_list_to_dict(
+            list_of_categories[start_index:end_index]
+        )
 
         return jsonify({"success": True, "categories": returned_categories}), 200
 
