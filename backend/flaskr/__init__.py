@@ -53,26 +53,31 @@ def create_app(test_config=None):
     DONE: Create an endpoint to handle GET requests for all available categories.
     """
 
+    def conv_categories_list_to_dict(categories):
+        returned_categories = {}
+        for category in categories:
+            returned_categories[category.id] = category.type
+        return returned_categories
+
     @app.route(config["api_url"]["base"] + config["api_url"]["categories"])
     def find_categories():
+        page = request.args.get("page", 1, type=int)
+        item_per_page = 10
+
         try:
-            page = request.args.get("page", 1, type=int)
-            item_per_page = 10
-
             list_of_categories = Category.query.all()
-
-            start_index = (page - 1) * item_per_page
-            end_index = page * item_per_page
-
-            if start_index > len(list_of_categories):
-                abort(404)
-
-            returned_categories = {}
-            for category in list_of_categories[start_index:end_index]:
-                returned_categories[category.id] = category.type
-
         except:
             abort(500)
+
+        start_index = (page - 1) * item_per_page
+        end_index = page * item_per_page
+
+        if start_index > len(list_of_categories):
+            abort(404)
+
+        returned_categories = conv_categories_list_to_dict(
+            list_of_categories[start_index:end_index]
+        )
 
         return jsonify({"success": True, "categories": returned_categories}), 200
 
@@ -91,35 +96,37 @@ def create_app(test_config=None):
 
     @app.route(config["api_url"]["base"] + config["api_url"]["questions"])
     def find_questions():
+
+        page = request.args.get("page", 1, type=int)
+        item_per_page = 5
+        try:
+            list_of_questions = Question.query.all()
+        except:
+            abort(500)
+
+        start_index = (page - 1) * item_per_page
+        end_index = page * item_per_page
+
+        if start_index > len(list_of_questions):
+            abort(404)
+
+        returned_questions = []
+        for question in list_of_questions[start_index:end_index]:
+            returned_questions.append(question.format())
+
+        try:
+            list_of_categories = Category.query.all()
+        except:
+            abort(500)
+
+        returned_categories = conv_categories_list_to_dict(list_of_categories)
+
         return jsonify(
             {
                 "success": True,
-                "total_questions": 2,
-                "questions": [
-                    {
-                        "id": 1,
-                        "question": "What is the name of your cat?",
-                        "answer": "Soloha",
-                        "category": 1,
-                        "difficulty": 3,
-                    },
-                    {
-                        "id": 1,
-                        "question": "What is the name of your dog?",
-                        "answer": "Aloha",
-                        "category": 1,
-                        "difficulty": 3,
-                    },
-                ],
-                "categories": {
-                    "1": "Science",
-                    "2": "Art",
-                    "3": "Geography",
-                    "4": "History",
-                    "5": "Entertainment",
-                    "6": "Sports",
-                },
-                "current_category": "Art",
+                "total_questions": len(list_of_questions),
+                "questions": returned_questions,
+                "categories": returned_categories,
             }
         )
 
@@ -193,7 +200,7 @@ def create_app(test_config=None):
             jsonify(
                 {"success": False, "error": 500, "message": "internal server error"}
             ),
-            404,
+            500,
         )
 
     return app

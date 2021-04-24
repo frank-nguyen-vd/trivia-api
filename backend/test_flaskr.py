@@ -44,7 +44,7 @@ class TriviaTestCase(unittest.TestCase):
     TODO: Write at least one test for each test for successful operation and for expected errors.
     """
 
-    # TODO: write test cases for endpoint /categories
+    # DONE: write test cases for endpoint /categories
     def test_get_paginated_categories(self):
         res = self.client().get(
             self.config["api_url"]["base"] + self.config["api_url"]["categories"]
@@ -55,7 +55,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], True)
         self.assertEqual("categories" in data, True)
 
-    def test_404_request_categories_beyong_valid_pages(self):
+    def test_404_get_categories_beyong_valid_pages(self):
         res = self.client().get(
             self.config["api_url"]["base"]
             + self.config["api_url"]["categories"]
@@ -68,7 +68,29 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["message"], "resource not found")
         self.assertEqual("categories" in data, False)
 
-    # TODO: write test cases for /api/v1/questions
+    # DONE: write test cases for endpoint /questions
+    def test_get_paginated_questions(self):
+        res = self.client().get(
+            self.config["api_url"]["base"] + self.config["api_url"]["questions"]
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertEqual("questions" in data, True)
+
+    def test_404_get_questions_beyong_valid_pages(self):
+        res = self.client().get(
+            self.config["api_url"]["base"]
+            + self.config["api_url"]["questions"]
+            + "?page=100000"
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["message"], "resource not found")
+        self.assertEqual("questions" in data, False)
 
     # TODO: write test cases for /api/v1/quizzes
 
