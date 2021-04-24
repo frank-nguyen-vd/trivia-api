@@ -44,6 +44,34 @@ class TriviaTestCase(unittest.TestCase):
     TODO: Write at least one test for each test for successful operation and for expected errors.
     """
 
+    # TODO: write test cases for endpoint /categories
+    def test_get_paginated_categories(self):
+        res = self.client().get(
+            self.config["api_url"]["base"] + self.config["api_url"]["categories"]
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertEqual("categories" in data, True)
+
+    def test_404_request_categories_beyong_valid_pages(self):
+        res = self.client().get(
+            self.config["api_url"]["base"]
+            + self.config["api_url"]["categories"]
+            + "?page=100000"
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["message"], "resource not found")
+        self.assertEqual("categories" in data, False)
+
+    # TODO: write test cases for /api/v1/questions
+
+    # TODO: write test cases for /api/v1/quizzes
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
