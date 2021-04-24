@@ -18,7 +18,7 @@ def create_app(test_config=None):
     @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
     """
 
-    @app.route("/")
+    @app.route("/api/v1")
     def index():
         return jsonify({"success": True, "message": "Welcome to Trivia-API"})
 
