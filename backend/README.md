@@ -1,5 +1,8 @@
-## Backend - Full Stack Trivia API 
+# Backend - Full Stack Trivia API 
 
+## Introduction
+
+## Getting Started
 ### Installing Dependencies for the Backend
 
 1. **Python 3.7** - Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
@@ -22,23 +25,93 @@ This will install all of the required packages we selected within the `requireme
 
  - [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross origin requests from our frontend server. 
 
+ - [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/) is an extension that handles SQLAlchemy database migrations for Flask application using Alembic. 
+
 ### Database Setup
 With Postgres running, restore a database using the trivia.psql file provided. From the backend folder in terminal run:
 ```bash
-psql trivia < trivia.psql
+sudo -u postgres psql trivia < trivia.psql
 ```
 
 ### Running the server
 
 From within the `./src` directory first ensure you are working using your created virtual environment.
 
-To run the server, execute:
+To run the server in development mode, execute:
 
 ```bash
+export FLASK_APP=flaskr
 flask run --reload
 ```
 
 The `--reload` flag will detect file changes and restart the server automatically.
+
+## API Reference
+GET '/api/v1/'
+- Description: Return a welcome message
+- Request Arguments: None
+- Returns: An object with a welcome message 
+```json
+{
+    'success' : True,
+    'message' : "Welcome to Trivia-Api"
+}
+```
+
+GET '/api/v1/categories'
+- Description: Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
+- Request Arguments: None
+- Returns: An object with a key 'categories' that contains objects of key:value pairs. 
+```json
+{
+    'success': True,
+    'categories':{
+        '1' : "Science",
+        '2' : "Art",
+        '3' : "Geography",
+        '4' : "History",
+        '5' : "Entertainment",
+        '6' : "Sports"
+    }
+}
+```
+
+GET '/api/v1/questions'
+- Description: Fetches a list of questions
+- Request Arguments: None
+- Returns:
+```json
+    {
+        "success": True,
+        "total_questions": 2,
+        "questions": [
+            {
+                "id": 1,
+                "question": "What is the name of your cat?",
+                "answer": "Soloha",
+                "category": 1,
+                "difficulty": 3,
+            },
+            {
+                "id": 1,
+                "question": "What is the name of your dog?",
+                "answer": "Aloha",
+                "category": 1,
+                "difficulty": 3,
+            },
+        ],
+        "categories": {
+            "1": "Science",
+            "2": "Art",
+            "3": "Geography",
+            "4": "History",
+            "5": "Entertainment",
+            "6": "Sports",
+        },
+        "current_category": "Art",
+    }
+```
+
 
 ## ToDo Tasks
 
