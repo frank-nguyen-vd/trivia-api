@@ -47,7 +47,7 @@ flask run --reload
 The `--reload` flag will detect file changes and restart the server automatically.
 
 ## API Reference
-GET '/api/v1/'
+GET `/api/v1/`
 - Description: Return a welcome message
 - Request Arguments: None
 - Returns: An object with a welcome message 
@@ -58,9 +58,10 @@ GET '/api/v1/'
 }
 ```
 
-GET '/api/v1/categories'
-- Description: Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
+GET `/api/v1/categories`
+- Description: Get a paginated list of categories
+- Request Arguments: 
+  - page: if list of categories spans over multiple pages, then `page` is the page number you want to view
 - Returns: An object with a key 'categories' that contains objects of key:value pairs. 
 ```json
 {
@@ -77,8 +78,9 @@ GET '/api/v1/categories'
 ```
 
 GET '/api/v1/questions'
-- Description: Fetches a list of questions
-- Request Arguments: None
+- Description: Get a paginated list of questions
+- Request Arguments: 
+  - page: if list of questions spans over multiple pages, then `page` is the page number you want to view
 - Returns:
 ```json
     {
@@ -108,7 +110,7 @@ GET '/api/v1/questions'
             "5": "Entertainment",
             "6": "Sports",
         },
-        "current_category": "Art",
+        "current_category": 1,
     }
 ```
 
