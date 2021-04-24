@@ -18,10 +18,6 @@ def create_app(test_config=None):
     @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
     """
 
-    @app.route("/api/v1")
-    def index():
-        return jsonify({"success": True, "message": "Welcome to Trivia-API"})
-
     """
     @TODO: Use the after_request decorator to set Access-Control-Allow
     """
@@ -31,6 +27,60 @@ def create_app(test_config=None):
     Create an endpoint to handle GET requests 
     for all available categories.
     """
+
+    @app.route("/api/v1")
+    def index():
+        return jsonify({"success": True, "message": "Welcome to Trivia-API"})
+
+    @app.route("/api/v1/categories")
+    def find_categories():
+        return jsonify(
+            {
+                "success": True,
+                "categories": {
+                    "1": "Science",
+                    "2": "Art",
+                    "3": "Geography",
+                    "4": "History",
+                    "5": "Entertainment",
+                    "6": "Sports",
+                },
+            }
+        )
+
+    @app.route("/api/v1/questions")
+    def find_questions():
+        return jsonify(
+            {
+                "success": True,
+                "total_questions": 2,
+                "questions": [
+                    {
+                        "id": 1,
+                        "question": "What is the name of your cat?",
+                        "answer": "Soloha",
+                        "category": 1,
+                        "difficulty": 3,
+                    },
+                    {
+                        "id": 1,
+                        "question": "What is the name of your dog?",
+                        "answer": "Aloha",
+                        "category": 1,
+                        "difficulty": 3,
+                    },
+                ],
+                "categories": {
+                    "1": "Science",
+                    "2": "Art",
+                    "3": "Geography",
+                    "4": "History",
+                    "5": "Entertainment",
+                    "6": "Sports",
+                },
+                "current_category": "Art",
+            }
+        )
 
     """
     @TODO: 
