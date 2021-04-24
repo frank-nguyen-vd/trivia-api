@@ -61,19 +61,19 @@ def create_app(test_config=None):
 
     @app.route(config["api_url"]["base"] + config["api_url"]["categories"])
     def find_categories():
-            page = request.args.get("page", 1, type=int)
-            item_per_page = 10
+        page = request.args.get("page", 1, type=int)
+        item_per_page = 10
 
         try:
             list_of_categories = Category.query.all()
         except:
             abort(500)
 
-            start_index = (page - 1) * item_per_page
-            end_index = page * item_per_page
+        start_index = (page - 1) * item_per_page
+        end_index = page * item_per_page
 
-            if start_index > len(list_of_categories):
-                abort(404)
+        if start_index > len(list_of_categories):
+            abort(404)
 
         returned_categories = conv_categories_list_to_dict(
             list_of_categories[start_index:end_index]
