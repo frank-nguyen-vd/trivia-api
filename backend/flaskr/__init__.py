@@ -198,7 +198,17 @@ def create_app(test_config=None):
         if quiz_category is None:
             abort(422)
 
-        return jsonify({"success": True, "question": "How are you?"})
+        return jsonify(
+            {
+                "success": True,
+                "question": {
+                    "answer": "Ok",
+                    "question": "How are you?",
+                    "difficulty": 1,
+                    "category": 1,
+                },
+            }
+        )
 
     """
     @TODO: 
