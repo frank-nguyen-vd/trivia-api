@@ -85,35 +85,6 @@ GET `/api/v1/categories?page=<page_number>`
 }
 ```
 
-POST '/api/v1/quizzes'
-
-- Description: Get a random question given a category and previous asked questions
-- Request Arguments:
-
-```json
-{
-  "previous_questions": [1, 3, 5],
-  "quiz_category": {
-    "id": 1
-  }
-}
-```
-
-- Returns:
-
-```json
-{
-  "success": True,
-  "question": {
-    "id": 1,
-    "question": "What is the name of your cat?",
-    "answer": "Soloha",
-    "category": 1,
-    "difficulty": 3
-  }
-}
-```
-
 GET `/api/v1/questions?page=<page_number>`
 
 - Description: Get a paginated list of questions
@@ -183,6 +154,57 @@ GET `/api/v1/categories/<category_id>/questions?page=<page_number>`
   "current_category": {
     "id": 1
   }
+}
+```
+
+POST '/api/v1/quizzes'
+
+- Description: Get a random question given a category and previous asked questions
+- Request Arguments:
+
+```json
+{
+  "previous_questions": [1, 3, 5],
+  "quiz_category": {
+    "id": 1
+  }
+}
+```
+
+- Returns:
+
+```json
+{
+  "success": True,
+  "question": {
+    "id": 1,
+    "question": "What is the name of your cat?",
+    "answer": "Soloha",
+    "category": 1,
+    "difficulty": 3
+  }
+}
+```
+
+POST '/api/v1/questions'
+
+- Description: Add a new question to database
+- Request Arguments:
+
+```json
+{
+  "question": "Who invented relativity theory?",
+  "answer": "Albert Einstein",
+  "difficulty": 1,
+  "category": 1
+}
+```
+
+- Returns:
+
+```json
+{
+  "success": True
 }
 ```
 
