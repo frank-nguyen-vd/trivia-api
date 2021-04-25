@@ -169,6 +169,21 @@ def create_app(test_config=None):
     category to be shown. 
     """
 
+    @app.route(
+        config["api_url"]["base"]
+        + config["api_url"]["categories"]
+        + "/<int:category_id>"
+        + config["api_url"]["questions"],
+        methods=["POST"],
+    )
+    def find_questions_in_category(category_id):
+        return {
+            "success": True,
+            "total_questions": 0,
+            "questions": [],
+            "current_category": 1,
+        }
+
     """
     @DONE: 
     Create a POST endpoint to get questions to play the quiz. 
@@ -221,7 +236,7 @@ def create_app(test_config=None):
         )
 
     """
-    @TODO: 
+    @DONE: 
     Create error handlers for all expected errors 
     including 404 and 422. 
     """
