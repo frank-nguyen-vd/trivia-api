@@ -137,6 +137,28 @@ def create_app(test_config=None):
     of the questions list in the "List" tab.  
     """
 
+    @app.route("/api/v1/questions", methods=["POST"])
+    def create_a_question():
+        try:
+            body = request.get_json()
+            question = body.get("question")
+            answer = body.get("answer")
+            difficulty = body.get("difficulty")
+            category = body.get("category")
+        except:
+            abort(422)
+
+        if question is None or answer is None or difficulty is None or category is None:
+            abort(422)
+
+        try:
+            new_question = Question(question, answer, category, difficulty)
+            new_question.insert()
+        except:
+            abort(500)
+
+        return jsonify({"success": True})
+
     """
     @TODO: 
     Create a POST endpoint to get questions based on a search term. 
@@ -149,7 +171,7 @@ def create_app(test_config=None):
     """
 
     """
-    @TODO: 
+    @DONE: 
     Create a GET endpoint to get questions based on category. 
 
     TEST: In the "List" tab / main screen, clicking on one of the 
