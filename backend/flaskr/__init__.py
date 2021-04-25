@@ -185,23 +185,20 @@ def create_app(test_config=None):
         config["api_url"]["base"] + config["api_url"]["quizzes"], methods=["POST"]
     )
     def get_a_random_question():
-        body = request.get_json()
-
-        previous_questions = body.get("previous_questions")
-        quiz_category = body.get("quiz_category")
+        try:
+            body = request.get_json()
+            previous_questions = body.get("previous_questions")
+            quiz_category = body.get("quiz_category")
+        except:
+            abort(422)
 
         if previous_questions is None or not isinstance(previous_questions, list):
             abort(422)
 
-        if quiz_category is None or not isinstance(quiz_category, str):
+        if quiz_category is None:
             abort(422)
 
-        try:
-            quiz_category = json.loads(quiz_category)
-        except:
-            abort(422)
-
-        return {"success": True, "question": "How are you?"}
+        return jsonify({"success": True, "question": "How are you?"})
 
     """
     @TODO: 
