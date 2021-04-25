@@ -82,7 +82,7 @@ def create_app(test_config=None):
         return jsonify({"success": True, "categories": returned_categories}), 200
 
     """
-    @TODO: 
+    @DONE: 
     Create an endpoint to handle GET requests for questions, 
     including pagination (every 10 questions). 
     This endpoint should return a list of questions, 
@@ -180,6 +180,28 @@ def create_app(test_config=None):
     one question at a time is displayed, the user is allowed to answer
     and shown whether they were correct or not. 
     """
+
+    @app.route(
+        config["api_url"]["base"] + config["api_url"]["quizzes"], methods=["POST"]
+    )
+    def get_a_random_question():
+        body = request.get_json()
+
+        previous_questions = body.get("previous_questions")
+        quiz_category = body.get("quiz_category")
+
+        if previous_questions is None or not isinstance(previous_questions, list):
+            abort(422)
+
+        if quiz_category is None or not isinstance(quiz_category, str):
+            abort(422)
+
+        try:
+            quiz_category = json.loads(quiz_category)
+        except:
+            abort(422)
+
+        return {"success": True, "question": "How are you?"}
 
     """
     @TODO: 
