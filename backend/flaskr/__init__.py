@@ -82,6 +82,17 @@ def create_app(test_config=None):
     Clicking on the page numbers should update the questions. 
     """
 
+    """
+    @DONE: 
+    Create a POST endpoint to get questions based on a search term. 
+    It should return any questions for whom the search term 
+    is a substring of the question. 
+
+    TEST: Search by any phrase. The questions list will update to include 
+    only question that include that string within their question. 
+    Try using the word "title" to start. 
+    """
+
     @app.route("/api/v1/questions")
     def find_questions():
         page = request.args.get("page", 1, type=int)
@@ -130,7 +141,7 @@ def create_app(test_config=None):
     """
 
     """
-    @TODO: 
+    @DONE: 
     Create an endpoint to POST a new question, 
     which will require the question and answer text, 
     category, and difficulty score.
@@ -161,17 +172,6 @@ def create_app(test_config=None):
             abort(500)
 
         return jsonify({"success": True})
-
-    """
-    @TODO: 
-    Create a POST endpoint to get questions based on a search term. 
-    It should return any questions for whom the search term 
-    is a substring of the question. 
-
-    TEST: Search by any phrase. The questions list will update to include 
-    only question that include that string within their question. 
-    Try using the word "title" to start. 
-    """
 
     """
     @DONE: 

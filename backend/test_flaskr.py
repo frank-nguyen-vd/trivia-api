@@ -31,7 +31,7 @@ class TriviaTestCase(unittest.TestCase):
         pass
 
     """
-    TODO: Write at least one test for each test for successful operation and for expected errors.
+    DONE: Write at least one test for each test for successful operation and for expected errors.
     """
 
     # DONE: write test cases for endpoint /categories
@@ -150,7 +150,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual("questions" in data, False)
         self.assertEqual("current_category" in data, False)
 
-    # TODO: write test cases for POST /api/v1/questions
+    # DONE: write test cases for POST /api/v1/questions
     def test_create_a_question(self):
         res = self.client().post(
             "/api/v1/questions",

@@ -85,11 +85,12 @@ GET `/api/v1/categories?page=<page_number>`
 }
 ```
 
-GET `/api/v1/questions?page=<page_number>`
+GET `/api/v1/questions?page=<number>&searchTerm=<string>`
 
 - Description: Get a paginated list of questions
 - Request Arguments:
   - page: if list of questions spans over multiple pages, then `page` is the page number you want to view
+  - searchTerm: to find questions that include the string search term
 - Returns:
 
 ```json
