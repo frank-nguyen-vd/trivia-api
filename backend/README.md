@@ -209,6 +209,18 @@ POST '/api/v1/questions'
 }
 ```
 
+DELETE `/api/v1/questions/<id>`
+
+- Description: Delete a question given id
+- Request Arguments: None
+- Returns:
+
+```json
+{
+  "success": True
+}
+```
+
 ## Errors
 
 | Code | Type          | Message               |
