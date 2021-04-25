@@ -12,7 +12,7 @@ class QuestionView extends Component {
       questions: [],
       page: 1,
       totalQuestions: 0,
-      categories: {}
+      categories: {},
     };
   }
 
@@ -28,14 +28,14 @@ class QuestionView extends Component {
         this.setState({
           questions: result.questions,
           totalQuestions: result.total_questions,
-          categories: result.categories
+          categories: result.categories,
         });
         return;
       },
       error: (error) => {
         alert("Unable to load questions. Please try your request again");
         return;
-      }
+      },
     });
   };
 
@@ -64,20 +64,20 @@ class QuestionView extends Component {
 
   getByCategory = (id) => {
     $.ajax({
-      url: `/api/v1/categories/${id}/questions`, //DONE: update request URL
+      url: `/api/v1/categories/${id}/questions`, //TODO: update request URL
       type: "GET",
       success: (result) => {
         this.setState({
           questions: result.questions,
           totalQuestions: result.total_questions,
-          currentCategory: result.current_category
+          currentCategory: result.current_category,
         });
         return;
       },
       error: (error) => {
         alert("Unable to load questions. Please try your request again");
         return;
-      }
+      },
     });
   };
 
@@ -89,21 +89,21 @@ class QuestionView extends Component {
       contentType: "application/json",
       data: JSON.stringify({ searchTerm: searchTerm }),
       xhrFields: {
-        withCredentials: true
+        withCredentials: true,
       },
       crossDomain: true,
       success: (result) => {
         this.setState({
           questions: result.questions,
           totalQuestions: result.total_questions,
-          currentCategory: result.current_category
+          currentCategory: result.current_category,
         });
         return;
       },
       error: (error) => {
         alert("Unable to load questions. Please try your request again");
         return;
-      }
+      },
     });
   };
 
@@ -119,7 +119,7 @@ class QuestionView extends Component {
           error: (error) => {
             alert("Unable to load questions. Please try your request again");
             return;
-          }
+          },
         });
       }
     }

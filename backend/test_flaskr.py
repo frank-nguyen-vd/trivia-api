@@ -92,54 +92,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["message"], "resource not found")
         self.assertEqual("questions" in data, False)
 
-    # DONE: write test cases for /api/v1/quizzes
-    def test_get_a_quiz_question(self):
-        previous_questions = [1, 2]
-        category_id = 1
-        res = self.client().post(
-            self.config["api_url"]["base"] + self.config["api_url"]["quizzes"],
-            json={
-                "previous_questions": previous_questions,
-                "quiz_category": {"id": category_id},
-            },
-        )
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data["success"], True)
-        self.assertEqual("question" in data, True)
-        self.assertEqual("id" in data["question"], True)
-        self.assertEqual("question" in data["question"], True)
-        self.assertEqual("answer" in data["question"], True)
-        self.assertEqual("difficulty" in data["question"], True)
-        self.assertEqual("category" in data["question"], True)
-        self.assertEqual(data["question"]["id"] in previous_questions, False)
-        self.assertEqual(data["question"]["category"], category_id)
-
-    def test_422_send_invalid_filter_for_quiz_question(self):
-        # None Type
-        res = self.client().post(
-            self.config["api_url"]["base"] + self.config["api_url"]["quizzes"],
-            json={"previous_questions": None, "quiz_category": None},
-        )
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 422)
-        self.assertEqual(data["success"], False)
-        self.assertEqual(data["message"], "unprocessable entity")
-        self.assertEqual("question" in data, False)
-
-        # Wrong key name
-        res = self.client().post(
-            self.config["api_url"]["base"] + self.config["api_url"]["quizzes"],
-            json={"wrong_previous_questions": [], "wrong_quiz_category": {"id": 1}},
-        )
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 422)
-        self.assertEqual(data["success"], False)
-        self.assertEqual(data["message"], "unprocessable entity")
-        self.assertEqual("question" in data, False)
+    # TODO: write test cases for /api/v1/quizzes
 
 
 # Make the tests conveniently executable
