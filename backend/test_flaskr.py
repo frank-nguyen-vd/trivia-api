@@ -119,7 +119,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["message"], "unprocessable entity")
         self.assertEqual("question" in data, False)
 
-    # DONE write test cases for /api/v1/category/<int:category_id>/questions
+    # DONE: write test cases for /api/v1/category/<int:category_id>/questions
     def test_get_questions_in_category(self):
         res = self.client().get("/api/v1/categories/1/questions?page=1")
         data = json.loads(res.data)
