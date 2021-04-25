@@ -54,7 +54,16 @@ class TriviaTestCase(unittest.TestCase):
 
     # DONE: write test cases for endpoint /questions
     def test_get_paginated_questions(self):
+        # List all questions
         res = self.client().get("/api/v1/questions?page=1")
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertEqual("questions" in data, True)
+
+        # Search questions
+        res = self.client().get("/api/v1/questions?searchTerm=What")
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
