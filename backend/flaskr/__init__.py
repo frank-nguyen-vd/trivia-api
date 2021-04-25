@@ -82,7 +82,7 @@ def create_app(test_config=None):
         return jsonify({"success": True, "categories": returned_categories}), 200
 
     """
-    @TODO: 
+    @DONE: 
     Create an endpoint to handle GET requests for questions, 
     including pagination (every 10 questions). 
     This endpoint should return a list of questions, 
@@ -170,7 +170,7 @@ def create_app(test_config=None):
     """
 
     """
-    @TODO: 
+    @DONE: 
     Create a POST endpoint to get questions to play the quiz. 
     This endpoint should take category and previous question parameters 
     and return a random questions within the given category, 
@@ -180,6 +180,45 @@ def create_app(test_config=None):
     one question at a time is displayed, the user is allowed to answer
     and shown whether they were correct or not. 
     """
+
+    @app.route(
+        config["api_url"]["base"] + config["api_url"]["quizzes"], methods=["POST"]
+    )
+    def get_a_random_question():
+        try:
+            body = request.get_json()
+            previous_questions = body.get("previous_questions")
+            quiz_category = body.get("quiz_category")
+        except:
+            abort(422)
+
+        if previous_questions is None or not isinstance(previous_questions, list):
+            abort(422)
+
+        if quiz_category is None:
+            abort(422)
+
+        try:
+            list_of_questions = Question.query.filter(
+                Question.id not in previous_questions,
+                Question.category == quiz_category["id"],
+            ).all()
+
+            if list_of_questions == []:
+                return jsonify({"success": True})
+
+            returned_question = list_of_questions[
+                random.randint(0, len(list_of_questions) - 1)
+            ].format()
+        except:
+            abort(500)
+
+        return jsonify(
+            {
+                "success": True,
+                "question": returned_question,
+            }
+        )
 
     """
     @TODO: 
@@ -192,6 +231,15 @@ def create_app(test_config=None):
         return (
             jsonify({"success": False, "error": 404, "message": "resource not found"}),
             404,
+        )
+
+    @app.errorhandler(422)
+    def unprocessable_entity(error):
+        return (
+            jsonify(
+                {"success": False, "error": 422, "message": "unprocessable entity"}
+            ),
+            422,
         )
 
     @app.errorhandler(500)

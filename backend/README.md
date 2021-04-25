@@ -85,6 +85,35 @@ GET `/api/v1/categories`
 }
 ```
 
+POST '/api/v1/quizzes'
+
+- Description: Get a random question given a category and previous asked questions
+- Request Arguments:
+
+```json
+{
+  "previous_questions": [1, 3, 5],
+  "quiz_category": {
+    "id": 1
+  }
+}
+```
+
+- Returns:
+
+```json
+{
+  "success": True,
+  "question": {
+    "id": 1,
+    "question": "What is the name of your cat?",
+    "answer": "Soloha",
+    "category": 1,
+    "difficulty": 3
+  }
+}
+```
+
 GET '/api/v1/questions'
 
 - Description: Get a paginated list of questions
