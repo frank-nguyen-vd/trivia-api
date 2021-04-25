@@ -10,26 +10,14 @@ import os
 QUESTIONS_PER_PAGE = 10
 
 
-def load_config():
-    file_dir = os.path.dirname(os.path.realpath(__file__))
-    file_path = os.path.join(file_dir, "config.json")
-    with open(file_path) as f:
-        config = json.load(f)
-    return config
-
-
 def create_app(test_config=None):
     # create and configure the app
-    config = load_config()
-
     app = Flask(__name__)
     setup_db(app)
     """
     @DONE: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
     """
-    cors = CORS(
-        app, resources={r"{}/*".format(config["api_url"]["base"]): {"origins": "*"}}
-    )
+    cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
     """
     @DONE: Use the after_request decorator to set Access-Control-Allow
@@ -45,7 +33,7 @@ def create_app(test_config=None):
         )
         return response
 
-    @app.route(config["api_url"]["base"])
+    @app.route("/api/v1")
     def index():
         return jsonify({"success": True, "message": "Welcome to Trivia-API"})
 
@@ -59,7 +47,7 @@ def create_app(test_config=None):
             returned_categories[category.id] = category.type
         return returned_categories
 
-    @app.route(config["api_url"]["base"] + config["api_url"]["categories"])
+    @app.route("/api/v1/categories")
     def find_categories():
         page = request.args.get("page", 1, type=int)
         item_per_page = 10
@@ -94,7 +82,7 @@ def create_app(test_config=None):
     Clicking on the page numbers should update the questions. 
     """
 
-    @app.route(config["api_url"]["base"] + config["api_url"]["questions"])
+    @app.route("/api/v1/questions")
     def find_questions():
 
         page = request.args.get("page", 1, type=int)
@@ -169,12 +157,7 @@ def create_app(test_config=None):
     category to be shown. 
     """
 
-    @app.route(
-        config["api_url"]["base"]
-        + config["api_url"]["categories"]
-        + "/<int:category_id>"
-        + config["api_url"]["questions"]
-    )
+    @app.route("/api/v1/categories/<int:category_id>/questions")
     def find_questions_in_category(category_id):
         page = request.args.get("page", 1, type=int)
         item_per_page = 5
@@ -217,9 +200,7 @@ def create_app(test_config=None):
     and shown whether they were correct or not. 
     """
 
-    @app.route(
-        config["api_url"]["base"] + config["api_url"]["quizzes"], methods=["POST"]
-    )
+    @app.route("/api/v1/quizzes", methods=["POST"])
     def get_a_random_question():
         try:
             body = request.get_json()
