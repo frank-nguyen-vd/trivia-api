@@ -143,7 +143,7 @@ class TriviaTestCase(unittest.TestCase):
 
     # TODO write test cases for /api/v1/category/<int:category_id>/questions
     def test_get_questions_in_category(self):
-        res = self.client().post(
+        res = self.client().get(
             self.config["api_url"]["base"]
             + self.config["api_url"]["categories"]
             + "/1"
@@ -159,7 +159,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual("current_category" in data, True)
 
     def test_404_get_categorized_questions_beyond_valid_pages(self):
-        res = self.client().post(
+        res = self.client().get(
             self.config["api_url"]["base"]
             + self.config["api_url"]["categories"]
             + "/1"

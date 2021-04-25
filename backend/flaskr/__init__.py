@@ -173,16 +173,35 @@ def create_app(test_config=None):
         config["api_url"]["base"]
         + config["api_url"]["categories"]
         + "/<int:category_id>"
-        + config["api_url"]["questions"],
-        methods=["POST"],
+        + config["api_url"]["questions"]
     )
     def find_questions_in_category(category_id):
+        page = request.args.get("page", 1, type=int)
+        item_per_page = 5
+
+        try:
+            list_of_questions = Question.query.filter(
+                Question.category == category_id
+            ).all()
+        except:
+            abort(500)
+
+        start_index = (page - 1) * item_per_page
+        end_index = page * item_per_page
+
+        if start_index > len(list_of_questions):
+            abort(404)
+
+        returned_questions = []
+        for question in list_of_questions[start_index:end_index]:
+            returned_questions.append(question.format())
+
         return jsonify(
             {
                 "success": True,
-                "total_questions": 0,
-                "questions": [],
-                "current_category": 1,
+                "total_questions": len(returned_questions),
+                "questions": returned_questions,
+                "current_category": category_id,
             }
         )
 
