@@ -84,11 +84,14 @@ def create_app(test_config=None):
 
     @app.route("/api/v1/questions")
     def find_questions():
-
         page = request.args.get("page", 1, type=int)
+        search_term = request.args.get("searchTerm", "", type=str)
         item_per_page = 5
+
         try:
-            list_of_questions = Question.query.all()
+            list_of_questions = Question.query.filter(
+                Question.question.like("%{}%".format(search_term))
+            ).all()
         except:
             abort(500)
 
