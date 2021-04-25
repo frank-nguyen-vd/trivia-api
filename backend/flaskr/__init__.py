@@ -50,15 +50,14 @@ def create_app(test_config=None):
     @app.route("/api/v1/categories")
     def find_categories():
         page = request.args.get("page", 1, type=int)
-        item_per_page = 10
 
         try:
             list_of_categories = Category.query.all()
         except:
             abort(500)
 
-        start_index = (page - 1) * item_per_page
-        end_index = page * item_per_page
+        start_index = (page - 1) * QUESTIONS_PER_PAGE
+        end_index = page * QUESTIONS_PER_PAGE
 
         if start_index > len(list_of_categories):
             abort(404)
@@ -97,7 +96,6 @@ def create_app(test_config=None):
     def find_questions():
         page = request.args.get("page", 1, type=int)
         search_term = request.args.get("searchTerm", "", type=str)
-        item_per_page = 5
 
         try:
             list_of_questions = Question.query.filter(
@@ -106,8 +104,8 @@ def create_app(test_config=None):
         except:
             abort(500)
 
-        start_index = (page - 1) * item_per_page
-        end_index = page * item_per_page
+        start_index = (page - 1) * QUESTIONS_PER_PAGE
+        end_index = page * QUESTIONS_PER_PAGE
 
         if start_index > len(list_of_questions):
             abort(404)
@@ -199,7 +197,6 @@ def create_app(test_config=None):
     @app.route("/api/v1/categories/<int:category_id>/questions")
     def find_questions_in_category(category_id):
         page = request.args.get("page", 1, type=int)
-        item_per_page = 5
 
         try:
             list_of_questions = Question.query.filter(
@@ -208,8 +205,8 @@ def create_app(test_config=None):
         except:
             abort(500)
 
-        start_index = (page - 1) * item_per_page
-        end_index = page * item_per_page
+        start_index = (page - 1) * QUESTIONS_PER_PAGE
+        end_index = page * QUESTIONS_PER_PAGE
 
         if start_index > len(list_of_questions):
             abort(404)
