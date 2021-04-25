@@ -194,6 +194,15 @@ def create_app(test_config=None):
             404,
         )
 
+    @app.errorhandler(422)
+    def unprocessable_entity(error):
+        return (
+            jsonify(
+                {"success": False, "error": 422, "message": "unprocessable entity"}
+            ),
+            422,
+        )
+
     @app.errorhandler(500)
     def internal_server_error(error):
         return (
