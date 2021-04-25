@@ -198,15 +198,25 @@ def create_app(test_config=None):
         if quiz_category is None:
             abort(422)
 
+        try:
+            list_of_questions = Question.query.filter(
+                Question.id not in previous_questions,
+                Question.category == quiz_category["id"],
+            ).all()
+
+            if list_of_questions == []:
+                return jsonify({"success": True})
+
+            returned_question = list_of_questions[
+                random.randint(0, len(list_of_questions) - 1)
+            ].format()
+        except:
+            abort(500)
+
         return jsonify(
             {
                 "success": True,
-                "question": {
-                    "answer": "Ok",
-                    "question": "How are you?",
-                    "difficulty": 1,
-                    "category": 1,
-                },
+                "question": returned_question,
             }
         )
 
