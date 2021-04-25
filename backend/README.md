@@ -64,7 +64,7 @@ GET `/api/v1/`
 }
 ```
 
-GET `/api/v1/categories`
+GET `/api/v1/categories?page=<page_number>`
 
 - Description: Get a paginated list of categories
 - Request Arguments:
@@ -114,7 +114,7 @@ POST '/api/v1/quizzes'
 }
 ```
 
-GET '/api/v1/questions'
+GET `/api/v1/questions?page=<page_number>`
 
 - Description: Get a paginated list of questions
 - Request Arguments:
@@ -150,6 +150,39 @@ GET '/api/v1/questions'
     "6": "Sports"
   },
   "current_category": 1
+}
+```
+
+GET `/api/v1/categories/<category_id>/questions?page=<page_number>`
+
+- Description: Get a paginated list of questions in a given category
+- Request Arguments:
+  - page: if list of questions spans over multiple pages, then `page` is the page number you want to view
+- Returns:
+
+```json
+{
+  "success": True,
+  "total_questions": 2,
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the name of your cat?",
+      "answer": "Soloha",
+      "category": 1,
+      "difficulty": 3
+    },
+    {
+      "id": 1,
+      "question": "What is the name of your dog?",
+      "answer": "Aloha",
+      "category": 1,
+      "difficulty": 3
+    }
+  ],
+  "current_category": {
+    "id": 1
+  }
 }
 ```
 

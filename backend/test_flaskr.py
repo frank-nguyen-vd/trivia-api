@@ -79,7 +79,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], True)
         self.assertEqual("questions" in data, True)
 
-    def test_404_get_questions_beyong_valid_pages(self):
+    def test_404_get_questions_beyond_valid_pages(self):
         res = self.client().get(
             self.config["api_url"]["base"]
             + self.config["api_url"]["questions"]
@@ -140,6 +140,40 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], False)
         self.assertEqual(data["message"], "unprocessable entity")
         self.assertEqual("question" in data, False)
+
+    # TODO write test cases for /api/v1/category/<int:category_id>/questions
+    def test_get_questions_in_category(self):
+        res = self.client().get(
+            self.config["api_url"]["base"]
+            + self.config["api_url"]["categories"]
+            + "/1"
+            + self.config["api_url"]["questions"]
+            + "?page=1"
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertEqual("total_questions" in data, True)
+        self.assertEqual("questions" in data, True)
+        self.assertEqual("current_category" in data, True)
+
+    def test_404_get_categorized_questions_beyond_valid_pages(self):
+        res = self.client().get(
+            self.config["api_url"]["base"]
+            + self.config["api_url"]["categories"]
+            + "/1"
+            + self.config["api_url"]["questions"]
+            + "?page=10000"
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["message"], "resource not found")
+        self.assertEqual("total_questions" in data, False)
+        self.assertEqual("questions" in data, False)
+        self.assertEqual("current_category" in data, False)
 
 
 # Make the tests conveniently executable
