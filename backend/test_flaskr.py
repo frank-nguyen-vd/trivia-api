@@ -141,6 +141,94 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual("questions" in data, False)
         self.assertEqual("current_category" in data, False)
 
+    # TODO: write test cases for POST /api/v1/questions
+    def test_create_a_question(self):
+        res = self.client().post(
+            "/api/v1/questions",
+            json={
+                "question": "Who invented relativity theory?",
+                "answer": "Albert Einstein",
+                "difficulty": 1,
+                "category": 1,
+            },
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+
+    def test_422_create_a_question_with_invalid_parameters(self):
+        # With missing question
+        res = self.client().post(
+            "/api/v1/questions",
+            json={
+                "answer": "Albert Einstein",
+                "difficulty": 1,
+                "category": 1,
+            },
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data["success"], False)
+
+        # With missing answer
+        res = self.client().post(
+            "/api/v1/questions",
+            json={
+                "question": "Who invented relativity theory?",
+                "difficulty": 1,
+                "category": 1,
+            },
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data["success"], False)
+
+        # With missing difficulty
+        res = self.client().post(
+            "/api/v1/questions",
+            json={
+                "question": "Who invented relativity theory?",
+                "answer": "Albert Einstein",
+                "category": 1,
+            },
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data["success"], False)
+
+        # With missing category
+        res = self.client().post(
+            "/api/v1/questions",
+            json={
+                "question": "Who invented relativity theory?",
+                "answer": "Albert Einstein",
+                "difficulty": 1,
+            },
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data["success"], False)
+
+        # With invalid parameter name
+        res = self.client().post(
+            "/api/v1/questions",
+            json={
+                "question": "Who invented relativity theory?",
+                "invalid_answer": "Albert Einstein",
+                "difficulty": 1,
+                "category": 1,
+            },
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data["success"], False)
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
